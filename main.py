@@ -1,4 +1,4 @@
-importpygame
+import pygame
 import copy
 
 def main():
