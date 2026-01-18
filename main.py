@@ -1,6 +1,9 @@
 import math
 import pygame
 import copy
+import argparse
+import sys
+
 
 def liczba_zywych_sasiadow(siatka, x, y, rozmiar):
     """
@@ -20,16 +23,86 @@ def liczba_zywych_sasiadow(siatka, x, y, rozmiar):
                 suma += siatka[nx][ny]
     return suma
 
+
+def ustawienie_przypadku(siatka, nazwa, rozmiar):
+    """
+    funkcja wypełnia siatkę już zdefiniowanymi ustawieniami komórek (ciekawe przypadki) wg wyboru
+    """
+    mid = rozmiar // 2
+    if nazwa == "szybowiec": # glider
+        coords = [(0, 1), (1, 2), (2, 0), (2, 1), (2, 2)]
+        for dx, dy in coords:
+            siatka[mid + dx][mid + dy] = 1
+    elif nazwa == "oscylator": # 4 oscylujące prostokąty 3x1
+        siatka[mid][mid-1], siatka[mid][mid], siatka[mid][mid+1], siatka[mid+1][mid], siatka[mid-1][mid] = 1, 1, 1, 1, 1
+    elif nazwa == "generator_szybowcow": # generator szybowców (Gosper Glider Gun)
+        gen_coords = [
+            (24, 0), (22, 1), (24, 1), (12, 2), (13, 2), (20, 2), (21, 2), (34, 2), (35, 2),
+            (11, 3), (15, 3), (20, 3), (21, 3), (34, 3), (35, 3), (0, 4), (1, 4), (10, 4),
+            (16, 4), (20, 4), (21, 4), (0, 5), (1, 5), (10, 5), (14, 5), (16, 5), (17, 5),
+            (22, 5), (24, 5), (10, 6), (16, 6), (24, 6), (11, 7), (15, 7), (12, 8), (13, 8)
+        ]
+        
+        przesuniecie_x, przesuniecie_y = 5, 5
+        
+        for dx, dy in gen_coords:
+            nx, ny = przesuniecie_x + dx, przesuniecie_y + dy
+            if 0 <= nx < rozmiar and 0 <= ny < rozmiar:
+                siatka[nx][ny] = 1
+    elif nazwa == "diament": # diament - tworzy 4 szybowce
+        
+        mid = rozmiar // 2
+
+        for x in range(mid - 2, mid + 2):
+            siatka[x][mid - 4] = 1
+
+        for x in range(mid - 4, mid + 4):
+            siatka[x][mid - 2] = 1
+
+        for x in range(mid - 6, mid + 6):
+            siatka[x][mid] = 1
+
+        for x in range(mid - 4, mid + 4):
+            siatka[x][mid + 2] = 1
+
+        for x in range(mid - 2, mid + 2):
+            siatka[x][mid + 4] = 1
+
+def pobieranie_argumentow():
+    """
+    funkcja obsługuje argumenty z linii poleceń i ustawia dane wejściowe oraz sprawdza ich poprawność 
+    """
+    parser = argparse.ArgumentParser(description="Conway's Game of Life", formatter_class=argparse.RawTextHelpFormatter)
+    
+    parser.add_argument("--szybkosc", type=int, default=4, help="szybkość symulacji (1-50). domyślnie: 4")
+    
+    parser.add_argument("--rozmiar", type=int, default=50, help="rozmiar siatki (10-75) (liczba komórek w rzędzie/kolumnie). domyślnie: 50")
+    
+    parser.add_argument("--przypadek", type=str, choices=["szybowiec", "oscylator", "generator_szybowcow", "diament"], help="wybierz początkowy wzór: szybowiec, oscylator, generator_szybowcow, diament")
+
+    args = parser.parse_args()
+
+    # sprawdzenie poprawności danych
+    if not (1 <= args.szybkosc <= 50):
+        print("błąd: szybkość musi być w przedziale 1-50")
+        sys.exit(1)
+    if not (10 <= args.rozmiar <= 75):
+        print("błąd: rozmiar planszy musi być w przedziale 10-75")
+        sys.exit(1)
+        
+    return args
+
 def main():
+    # pobranie argumentów
+    args = pobieranie_argumentow()
 
     pygame.init()
     fps = 100
-
-    szybkosc = 4 # najlepiej od 1 - 10, tak można też zrobić że użytkownik podaje w argumencie szybkosc od 1 do 10
-
+    szybkosc = args.szybkosc
+    rozmiar_planszy = args.rozmiar
+    
     wielkosc_komorki = 10
-    rozmiar_planszy = 50 # rozmiar planszy (szerokośc i wysokość w komórkach) też może być do ustawienia przez użytkownika
-
+    
     offset = math.floor(1.4 * rozmiar_planszy)
 
     # Tworzenie siatki
@@ -41,16 +114,14 @@ def main():
     # 0 0 0
 
     siatka = [[0 for x in range(rozmiar_planszy)] for y in range(rozmiar_planszy)]
-    
-    #przykladowy przypadek:
-    #siatka[27][27] = 1
-    #siatka[26][27] = 1
-    #siatka[25][27] = 1
+
+    if args.przypadek:
+        ustawienie_przypadku(siatka, args.przypadek, rozmiar_planszy)
 
     screen = pygame.display.set_mode((wielkosc_komorki*rozmiar_planszy,wielkosc_komorki*rozmiar_planszy + offset))
     clock = pygame.time.Clock()
 
-    pauza = False
+    pauza = True
 
     count = 0
 
