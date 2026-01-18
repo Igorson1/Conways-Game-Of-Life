@@ -50,8 +50,6 @@ def ustawienie_przypadku(siatka, nazwa, rozmiar):
             if 0 <= nx < rozmiar and 0 <= ny < rozmiar:
                 siatka[nx][ny] = 1
     elif nazwa == "diament": # diament - tworzy 4 szybowce
-        
-        mid = rozmiar // 2
 
         for x in range(mid - 2, mid + 2):
             siatka[x][mid - 4] = 1
