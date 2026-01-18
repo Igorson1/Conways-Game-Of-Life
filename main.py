@@ -74,7 +74,7 @@ def pobieranie_argumentow():
     
     parser.add_argument("--szybkosc", type=int, default=4, help="szybkość symulacji (1-50). domyślnie: 4")
     
-    parser.add_argument("--rozmiar", type=int, default=50, help="rozmiar siatki (10-75) (liczba komórek w rzędzie/kolumnie). domyślnie: 50")
+    parser.add_argument("--rozmiar", type=int, default=50, help="rozmiar siatki (40-75) (liczba komórek w rzędzie/kolumnie). domyślnie: 50")
     
     parser.add_argument("--przypadek", type=str, choices=["szybowiec", "oscylator", "generator_szybowcow", "diament"], help="wybierz początkowy wzór: szybowiec, oscylator, generator_szybowcow, diament")
 
@@ -84,8 +84,8 @@ def pobieranie_argumentow():
     if not (1 <= args.szybkosc <= 50):
         print("błąd: szybkość musi być w przedziale 1-50")
         sys.exit(1)
-    if not (10 <= args.rozmiar <= 75):
-        print("błąd: rozmiar planszy musi być w przedziale 10-75")
+    if not (40 <= args.rozmiar <= 75):
+        print("błąd: rozmiar planszy musi być w przedziale 40-75")
         sys.exit(1)
         
     return args
