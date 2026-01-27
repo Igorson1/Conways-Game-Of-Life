@@ -74,7 +74,7 @@ def pobieranie_argumentow():
     """
     parser = argparse.ArgumentParser(description="Conway's Game of Life", formatter_class=argparse.RawTextHelpFormatter)
 
-    parser.add_argument("--szybkosc", type=int, default=4, help="szybkość symulacji (1-50). domyślnie: 4")
+    parser.add_argument("--szybkosc", type=int, default=4, help="szybko ć symulacji (1-50). domyślnie: 4")
     parser.add_argument("--rozmiar", type=int, default=50,
                         help="rozmiar siatki (10-75) (liczba komórek w rzędzie/kolumnie). domyślnie: 50")
     parser.add_argument("--przypadek", type=str, choices=["szybowiec", "oscylator", "generator_szybowcow", "diament"],
@@ -105,7 +105,7 @@ def main():
     wielkosc_komorki = 10
 
     # offset robi miejsce na UI nad planszą
-    offset = math.floor(1.4 * rozmiar_planszy)
+    offset = math.floor(1.3 * rozmiar_planszy)
 
     # Tworzenie siatki
     # Przykład pustej siadki 3x3, 0 odpowiada białej komórce, a 1 czarnej.
@@ -189,7 +189,7 @@ def main():
 
         # rysowanie tekstu nad planszą
         pygame.font.init()
-        my_font = pygame.font.SysFont('Arial', 30 * rozmiar_planszy // 50)
+        my_font = pygame.font.SysFont('Arial', offset // 3)
 
         if pauza:
             text1 = my_font.render('Gra zapuazowana (można zmieniać komórki)', False, (0, 0, 0))
@@ -198,8 +198,8 @@ def main():
             text1 = my_font.render('Naciśnij spacje aby zapauzować gre', False, (0, 0, 0))
             text2 = my_font.render('i móc zmieniać komórki', False, (0, 0, 0))
 
-        screen.blit(text1, (3, 0))
-        screen.blit(text2, (3, 30 * rozmiar_planszy // 50))
+        screen.blit(text1, (10, 5))
+        screen.blit(text2, (10, offset // 2))
 
         # rysownie komórek na planszy
         for x in range(rozmiar_planszy):
