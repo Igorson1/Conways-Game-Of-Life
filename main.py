@@ -120,7 +120,7 @@ def main():
 
 
     # offset robi miejsce na UI nad planszą
-    offset = math.floor(1.3 * rozmiar_planszy // ( 10//wielkosc_komorki))
+    offset = 97
 
     # Tworzenie siatki
     # Przykład pustej siadki 3x3, 0 odpowiada białej komórce, a 1 czarnej.
