@@ -87,7 +87,7 @@ def pobieranie_argumentow():
 
     parser.add_argument("--szybkosc", type=int, default=4, help="szybkość symulacji (1-50). domyślnie: 4")
     parser.add_argument("--rozmiar", type=int, default=1,
-                        help="rozmiar planszy (1-7) (liczba komórek w rzędzie/kolumnie). domyślnie: 1")
+                        help="rozmiar planszy (1-9) (liczba komórek w rzędzie/kolumnie). domyślnie: 1")
     parser.add_argument("--przypadek", type=str, choices=["szybowiec", "oscylator", "generator_szybowcow", "diament", "losowy"],
                         help="wybierz początkowy wzór")
 
@@ -97,8 +97,8 @@ def pobieranie_argumentow():
     if not (1 <= args.szybkosc <= 80):
         print("błąd: szybkość musi być w przedziale 1-80")
         sys.exit(1)
-    if not (1 <= args.rozmiar <= 7):
-        print("błąd: rozmiar planszy musi być w przedziale 10-75")
+    if not (1 <= args.rozmiar <= 9):
+        print("błąd: rozmiar planszy musi być w przedziale 1-9")
         sys.exit(1)
 
     return args
@@ -116,11 +116,11 @@ def main():
 
     wielkosc_komorki = 11 - args.rozmiar
 
-    rozmiar_planszy = 150 * 5//wielkosc_komorki
+    rozmiar_planszy = 100 * 5//wielkosc_komorki
 
 
     # offset robi miejsce na UI nad planszą
-    offset = 97
+    offset = 70
 
     # Tworzenie siatki
     # Przykład pustej siadki 3x3, 0 odpowiada białej komórce, a 1 czarnej.
