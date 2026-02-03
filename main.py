@@ -94,8 +94,8 @@ def pobieranie_argumentow():
     args = parser.parse_args()
 
     # sprawdzenie poprawności danych
-    if not (1 <= args.szybkosc <= 80):
-        print("błąd: szybkość musi być w przedziale 1-80")
+    if not (1 <= args.szybkosc <= 50):
+        print("błąd: szybkość musi być w przedziale 1-50")
         sys.exit(1)
     if not (1 <= args.rozmiar <= 9):
         print("błąd: rozmiar planszy musi być w przedziale 1-9")
