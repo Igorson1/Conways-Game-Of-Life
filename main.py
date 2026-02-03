@@ -85,7 +85,7 @@ def pobieranie_argumentow():
     """
     parser = argparse.ArgumentParser(description="Conway's Game of Life", formatter_class=argparse.RawTextHelpFormatter)
 
-    parser.add_argument("--szybkosc", type=int, default=4, help="szybkość symulacji (1-50). domyślnie: 4")
+    parser.add_argument("--szybkosc", type=int, default=4, help="szybkość symulacji (1-10). domyślnie: 4")
     parser.add_argument("--rozmiar", type=int, default=1,
                         help="rozmiar planszy (1-9) (liczba komórek w rzędzie/kolumnie). domyślnie: 1")
     parser.add_argument("--przypadek", type=str, choices=["szybowiec", "oscylator", "generator_szybowcow", "diament", "losowy"],
@@ -94,8 +94,8 @@ def pobieranie_argumentow():
     args = parser.parse_args()
 
     # sprawdzenie poprawności danych
-    if not (1 <= args.szybkosc <= 80):
-        print("błąd: szybkość musi być w przedziale 1-80")
+    if not (1 <= args.szybkosc <= 10):
+        print("błąd: szybkość musi być w przedziale 1-10")
         sys.exit(1)
     if not (1 <= args.rozmiar <= 9):
         print("błąd: rozmiar planszy musi być w przedziale 1-9")
@@ -176,7 +176,7 @@ def main():
         # kopiujemy siatkę, żeby zmiany nie wpływały na bieżące obliczenia sąsiadów
 
         # sterowanie szybkością symulacji niezależnie od FPS
-        if (szybkosc * count) % fps == 0:
+        if count % (2**((11-szybkosc)//2)) == 0:
             count = 0
             if not pauza:
                 for indeks in range(rozmiar_planszy*rozmiar_planszy):
