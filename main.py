@@ -30,10 +30,10 @@ def ustawienie_przypadku(siatka, nazwa, rozmiar):
     funkcja wypełnia siatkę już zdefiniowanymi ustawieniami komórek (ciekawe przypadki) wg wyboru
     """
     mid = rozmiar // 2
-    if nazwa == "losowe":
+    if nazwa == "losowy":
         for i in range(rozmiar):
             for j in range(rozmiar):
-                szansa_czarne = 0.37
+                szansa_czarne = 0.35
                 liczba = random.random()
                 if liczba <= szansa_czarne:
                     siatka[i][j] = 1
@@ -85,10 +85,10 @@ def pobieranie_argumentow():
     """
     parser = argparse.ArgumentParser(description="Conway's Game of Life", formatter_class=argparse.RawTextHelpFormatter)
 
-    parser.add_argument("--szybkosc", type=int, default=4, help="szybkość symulacji (1-80). domyślnie: 4")
-    parser.add_argument("--rozmiar", type=int, default=50,
-                        help="rozmiar siatki (10-75) (liczba komórek w rzędzie/kolumnie). domyślnie: 50")
-    parser.add_argument("--przypadek", type=str, choices=["szybowiec", "oscylator", "generator_szybowcow", "diament", "losowe"],
+    parser.add_argument("--szybkosc", type=int, default=4, help="szybkość symulacji (1-50). domyślnie: 4")
+    parser.add_argument("--rozmiar", type=int, default=1,
+                        help="rozmiar planszy (1-7) (liczba komórek w rzędzie/kolumnie). domyślnie: 1")
+    parser.add_argument("--przypadek", type=str, choices=["szybowiec", "oscylator", "generator_szybowcow", "diament", "losowy"],
                         help="wybierz początkowy wzór")
 
     args = parser.parse_args()
@@ -97,7 +97,7 @@ def pobieranie_argumentow():
     if not (1 <= args.szybkosc <= 80):
         print("błąd: szybkość musi być w przedziale 1-80")
         sys.exit(1)
-    if not (10 <= args.rozmiar <= 75):
+    if not (1 <= args.rozmiar <= 7):
         print("błąd: rozmiar planszy musi być w przedziale 10-75")
         sys.exit(1)
 
@@ -112,8 +112,11 @@ def main():
     pygame.init()
     fps = 100
     szybkosc = args.szybkosc
-    wielkosc_komorki = 3
-    rozmiar_planszy = args.rozmiar * (10//wielkosc_komorki)
+
+
+    wielkosc_komorki = 11 - args.rozmiar
+
+    rozmiar_planszy = 150 * 5//wielkosc_komorki
 
 
     # offset robi miejsce na UI nad planszą

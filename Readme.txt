@@ -41,7 +41,7 @@ python main.py
 
 Program przyjmuje argumenty:
 --szybkosc (szybkość symulacji (1-50). domyślnie: 4)
---rozmiar (rozmiar siatki (10-75) (liczba komórek w rzędzie/kolumnie). domyślnie: 50)
+--rozmiar (rozmiar siatki (1-7) (liczba komórek w rzędzie/kolumnie). domyślnie: 1)
 --przypadek (wybierz początkowy wzór)
 
 Więcej informacji po wpisaniu:
