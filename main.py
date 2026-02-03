@@ -3,6 +3,7 @@ import pygame
 import copy
 import argparse
 import sys
+import random
 
 
 def liczba_zywych_sasiadow(siatka, x, y, rozmiar):
@@ -29,6 +30,16 @@ def ustawienie_przypadku(siatka, nazwa, rozmiar):
     funkcja wypełnia siatkę już zdefiniowanymi ustawieniami komórek (ciekawe przypadki) wg wyboru
     """
     mid = rozmiar // 2
+    if nazwa == "losowe":
+        for i in range(rozmiar):
+            for j in range(rozmiar):
+                szansa_czarne = 0.37
+                liczba = random.random()
+                if liczba <= szansa_czarne:
+                    siatka[i][j] = 1
+                else:
+                    siatka[i][j] = 0
+
     if nazwa == "szybowiec":  # glider
         coords = [(0, 1), (1, 2), (2, 0), (2, 1), (2, 2)]
         for dx, dy in coords:
@@ -74,17 +85,17 @@ def pobieranie_argumentow():
     """
     parser = argparse.ArgumentParser(description="Conway's Game of Life", formatter_class=argparse.RawTextHelpFormatter)
 
-    parser.add_argument("--szybkosc", type=int, default=4, help="szybko ć symulacji (1-50). domyślnie: 4")
+    parser.add_argument("--szybkosc", type=int, default=4, help="szybkość symulacji (1-80). domyślnie: 4")
     parser.add_argument("--rozmiar", type=int, default=50,
                         help="rozmiar siatki (10-75) (liczba komórek w rzędzie/kolumnie). domyślnie: 50")
-    parser.add_argument("--przypadek", type=str, choices=["szybowiec", "oscylator", "generator_szybowcow", "diament"],
+    parser.add_argument("--przypadek", type=str, choices=["szybowiec", "oscylator", "generator_szybowcow", "diament", "losowe"],
                         help="wybierz początkowy wzór")
 
     args = parser.parse_args()
 
     # sprawdzenie poprawności danych
-    if not (1 <= args.szybkosc <= 50):
-        print("błąd: szybkość musi być w przedziale 1-50")
+    if not (1 <= args.szybkosc <= 80):
+        print("błąd: szybkość musi być w przedziale 1-80")
         sys.exit(1)
     if not (10 <= args.rozmiar <= 75):
         print("błąd: rozmiar planszy musi być w przedziale 10-75")
@@ -101,11 +112,12 @@ def main():
     pygame.init()
     fps = 100
     szybkosc = args.szybkosc
-    rozmiar_planszy = args.rozmiar
-    wielkosc_komorki = 10
+    wielkosc_komorki = 3
+    rozmiar_planszy = args.rozmiar * (10//wielkosc_komorki)
+
 
     # offset robi miejsce na UI nad planszą
-    offset = math.floor(1.3 * rozmiar_planszy)
+    offset = math.floor(1.3 * rozmiar_planszy // ( 10//wielkosc_komorki))
 
     # Tworzenie siatki
     # Przykład pustej siadki 3x3, 0 odpowiada białej komórce, a 1 czarnej.
@@ -157,15 +169,17 @@ def main():
         # Sekcja logiki
         #############################################
 
-        temp_siatka = copy.deepcopy(siatka)
+        temp_siatka = [rzad[:] for rzad in siatka]
         # kopiujemy siatkę, żeby zmiany nie wpływały na bieżące obliczenia sąsiadów
 
         # sterowanie szybkością symulacji niezależnie od FPS
         if (szybkosc * count) % fps == 0:
             count = 0
             if not pauza:
-                for x in range(rozmiar_planszy):
-                    for y in range(rozmiar_planszy):
+                for indeks in range(rozmiar_planszy*rozmiar_planszy):
+                        y = indeks // rozmiar_planszy
+                        x = indeks % rozmiar_planszy
+
                         sasiedzi = liczba_zywych_sasiadow(temp_siatka, x, y, rozmiar_planszy)
 
                         if temp_siatka[x][y] == 1:  # jesli żyje
