@@ -40,8 +40,8 @@ pip install -r requirements.txt
 python main.py
 
 Program przyjmuje argumenty:
---szybkosc (szybkość symulacji (1-50). domyślnie: 4)
---rozmiar (rozmiar siatki (1-7) (liczba komórek w rzędzie/kolumnie). domyślnie: 1)
+--szybkosc (szybkość symulacji (1-10). domyślnie: 4)
+--rozmiar (rozmiar siatki (1-9) (liczba komórek w rzędzie/kolumnie). domyślnie: 1)
 --przypadek (wybierz początkowy wzór)
 
 Więcej informacji po wpisaniu:
